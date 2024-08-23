@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+bool procTrans(int sID, int rID, int amt, int n, int userIDs[], int balances[]) {
+    int sIdx = sID - 1;
+    int rIdx = rID - 1;
+    if (balances[sIdx] >= amt) {
+        balances[rIdx] += amt;
+        balances[sIdx] -= amt;
+        return true;
+    }
+    return false;
+}
+int main() {
+    int n;
+    cin >> n;
+    int userIDs[n];
+    int balances[n];
+    for (int i = 0; i < n; ++i) {
+        cin >> userIDs[i] >> balances[i];
+    }
+    int t;
+    cin >> t;
+    vector<string> res;
+    while (t--) {
+        int sID, rID, amt;
+        cin >> sID >> rID >> amt;
+        bool success = procTrans(sID, rID, amt, n, userIDs, balances);
+        res.push_back(success ? "Success" : "Failure");
+    }
+    for (const string& r : res) {
+        cout << r << endl;
+    }
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (balances[i] > balances[j]) {
+                int tempBalance = balances[i];
+                balances[i] = balances[j];
+                balances[j] = tempBalance;
+                int tempUserID = userIDs[i];
+                userIDs[i] = userIDs[j];
+                userIDs[j] = tempUserID;
+            }
+        }
+    }
+    cout << endl;
+    for (int i = 0; i < n; ++i) {
+        cout << userIDs[i] << " " << balances[i] << endl;
+    }
+    return 0;
+}
